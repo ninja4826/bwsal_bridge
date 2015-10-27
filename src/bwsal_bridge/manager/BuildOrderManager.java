@@ -11,6 +11,7 @@ import bwapi.TechType;
 import bwapi.TilePosition;
 import bwapi.UpgradeType;
 import bwsal_bridge.GameHandler;
+import bwsal_bridge.priority.PriorityMap;
 import bwapi.UnitType;
 
 public class BuildOrderManager {
@@ -18,12 +19,11 @@ public class BuildOrderManager {
     protected final TechManager techManager;
     protected final UpgradeManager upgradeManager;
     protected final Map<Integer, List<BuildItem>> items =
-        new HashMap<Integer, List<BuildItem>>();
+        new PriorityMap();
     protected int usedMinerals;
     protected int usedGas;
     
-    public BuildOrderManager(BuildManager buildManager, TechManager techManager, 
-            UpgradeManager upgradeManager) {
+    public BuildOrderManager(BuildManager buildManager, TechManager techManager, UpgradeManager upgradeManager) {
         this.buildManager = buildManager;
         this.techManager = techManager;
         this.upgradeManager = upgradeManager;
@@ -35,11 +35,13 @@ public class BuildOrderManager {
         if (items.isEmpty()) {
             return;
         }
+        
+        
+        
         //TODO: last? really? aren't std::map orders random?
         //  who cares, I'm just gonna toss it in a list and do 
         //  what was done...but this is weird
-        List<Entry<Integer, List<BuildItem>>> list = new
-                ArrayList<Entry<Integer, List<BuildItem>>>(items.entrySet());
+        List<Entry<Integer, List<BuildItem>>> list = new ArrayList<Entry<Integer, List<BuildItem>>>(items.entrySet());
         int index = list.size() - 1;
         while (list.get(index).getValue().isEmpty()) {
             //erase it from me and the set
@@ -55,7 +57,8 @@ public class BuildOrderManager {
         Iterator<BuildItem> itemIterator = list.get(0).getValue().iterator();
         while (itemIterator.hasNext()) {
             BuildItem item = itemIterator.next();
-            if (!item.unitType.equals(UnitType.None)) {
+//            if (!item.unitType.equals(UnitType.None)) {
+            if (item.unitType != UnitType.None) {
                 if (item.isAdditional) {
                     if (item.count > 0) {
                         if (hasResources(item.unitType)) {
@@ -76,7 +79,8 @@ public class BuildOrderManager {
                         }
                     }
                 }
-            } else if (!item.techType.equals(TechType.None)) {
+//            } else if (!item.techType.equals(TechType.None)) {
+            } else if (item.techType != TechType.None) {
                 if (techManager.planned(item.techType)) {
                     itemIterator.remove();
                 } else if (hasResources(item.techType)) {
@@ -107,10 +111,12 @@ public class BuildOrderManager {
     }
 
     public void build(int count, UnitType type, int priority, TilePosition seedPosition) {
-        if (type.equals(UnitType.None) || type.equals(UnitType.Unknown)) {
+//        if (type.equals(UnitType.None) || type.equals(UnitType.Unknown)) {
+    	if (type == UnitType.None || type == UnitType.Unknown) {
             return;
         }
-        if (seedPosition.equals(TilePosition.None) || seedPosition.equals(TilePosition.Unknown)) {
+//        if (seedPosition.equals(TilePosition.None) || seedPosition.equals(TilePosition.Unknown)) {
+    	if (seedPosition == TilePosition.None || seedPosition == TilePosition.Unknown) {
             seedPosition = GameHandler.getGame().self().getStartLocation();
         }
         BuildItem newItem = new BuildItem();
@@ -133,7 +139,8 @@ public class BuildOrderManager {
     }
 
     public void buildAdditional(int count, UnitType type, int priority, TilePosition seedPosition) {
-        if (type.equals(UnitType.None) || type.equals(UnitType.Unknown)) {
+//        if (type.equals(UnitType.None) || type.equals(UnitType.Unknown)) {
+    	if (type == UnitType.None || type == UnitType.Unknown) {
             return;
         }
         if (seedPosition.equals(TilePosition.None) || seedPosition.equals(TilePosition.Unknown)) {
@@ -231,13 +238,13 @@ public class BuildOrderManager {
      *
      * @since 0.3
      */
-    protected static final class BuildItem {
-        protected UnitType unitType;
-        protected TechType techType;
-        protected UpgradeType upgradeType;
-        protected TilePosition seedPosition;
-        protected boolean isAdditional;
-        protected int count;
+    public static final class BuildItem {
+        public UnitType unitType;
+        public TechType techType;
+        public UpgradeType upgradeType;
+        public TilePosition seedPosition;
+        public boolean isAdditional;
+        public int count;
         
         protected BuildItem() {
         }

@@ -28,8 +28,9 @@ public class UpgradeManager extends ArbitratedManager {
     protected final Map<UpgradeType, Integer> startedLevel =
         new HashMap<UpgradeType, Integer>();
     
-    public UpgradeManager(Arbitrator<Unit, Double> arbitrator) {
+    public UpgradeManager(Arbitrator<Unit, Double> arbitrator, BuildingPlacer buildingPlacer) {
         super(arbitrator);
+        this.placer = buildingPlacer;
         for (Field f : UpgradeType.class.getDeclaredFields()) {
         	UpgradeType type;
 			try {
@@ -46,10 +47,6 @@ public class UpgradeManager extends ArbitratedManager {
 				e.printStackTrace();
 			}
         }
-    }
-    
-    public void setBuildingPlacer(BuildingPlacer buildingPlacer) {
-        placer = buildingPlacer;
     }
     
     @Override

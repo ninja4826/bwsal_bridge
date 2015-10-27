@@ -19,7 +19,8 @@ public class BaseManager {
 	protected BuildOrderManager builder;
     protected final Map<BaseLocation, Base> bases = new HashMap<BaseLocation, Base>();
     
-    public BaseManager() {
+    public BaseManager(BuildOrderManager builder) {
+    	this.builder = builder;
     }
     
     public BuildOrderManager getBuilder() {

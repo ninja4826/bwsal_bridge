@@ -9,15 +9,8 @@ public class SupplyManager {
     protected BuildOrderManager buildOrderManager;
     protected int lastFrameCheck;
     
-    public SupplyManager() {
-        
-    }
-    
-    public void setBuildManager(BuildManager buildManager) {
+    public SupplyManager(BuildManager buildManager, BuildOrderManager buildOrderManager) {
         this.buildManager = buildManager;
-    }
-    
-    public void setBuildOrderManager(BuildOrderManager buildOrderManager) {
         this.buildOrderManager = buildOrderManager;
     }
     

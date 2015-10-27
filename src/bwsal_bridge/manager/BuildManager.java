@@ -37,6 +37,10 @@ public class BuildManager {
         return buildingPlacer;
     }
     
+    public ProductionManager getProductionManager() {
+    	return productionManager;
+    }
+    
     public void onRemoveUnit(Unit unit) {
         constructionManager.onRemoveUnit(unit);
         productionManager.onRemoveUnit(unit);

@@ -40,13 +40,14 @@ public class WorkerManager extends ArbitratedManager {
     protected Set<Base> basesCache;
     protected int workersPerGas = 3;
 
-    public WorkerManager(Arbitrator<Unit, Double> arbitrator, BaseManager baseManager) {
+    public WorkerManager(Arbitrator<Unit, Double> arbitrator, BaseManager baseManager, int workersPerGas) {
         super(arbitrator);
         this.baseManager = baseManager;
+        this.workersPerGas = workersPerGas;
     }
     
-    public void setBaseManager(BaseManager baseManager) {
-        this.baseManager = baseManager;
+    public WorkerManager(Arbitrator<Unit, Double> arbitrator, BaseManager baseManager) {
+    	this(arbitrator, baseManager, 3);
     }
     
     @Override
@@ -217,7 +218,7 @@ public class WorkerManager extends ArbitratedManager {
         }
         //order workers to gather from their assigned resources
         for (Entry<Unit, WorkerData> worker : workers.entrySet()) {
-        	System.out.println("Worker loop");
+//        	System.out.println("Worker loop");
             //switch current resource to newResource when appropriate
             if (worker.getValue().resource == null || (worker.getKey().getTarget() != null &&
                     worker.getKey().getTarget().getType().isResourceDepot())) {
@@ -226,10 +227,10 @@ public class WorkerManager extends ArbitratedManager {
             if (WORKER_RESOURCES.contains(worker.getKey().getOrder()) &&
                     (worker.getKey().getTarget() == null || !worker.getKey().getTarget().exists() ||
                             !worker.getKey().getTarget().getType().isResourceDepot()) && 
-                            !worker.getKey().getTarget().equals(worker.getValue().resource)) {
+                            worker.getKey().getTarget().getID() != worker.getValue().resource.getID()) {
             	System.out.println("Right click");
 //                worker.getKey().rightClick(worker.getValue().resource);
-                worker.getKey().gather(worker.getValue().resource);
+                worker.getKey().gather(worker.getValue().resource, false);
             }
         }
     }

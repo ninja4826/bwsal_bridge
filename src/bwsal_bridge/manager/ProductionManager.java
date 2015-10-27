@@ -28,6 +28,30 @@ public class ProductionManager extends ArbitratedManager {
     protected final Map<UnitType, Integer> plannedCount;
     protected final Map<UnitType, Integer> startedCount;
     
+    public void print(String str) { System.out.println(str); }
+    
+    public void announceValues() {
+    	print("\nProduction Queues");
+    	for (Entry<UnitType, List<UnitType>> productionQueue : productionQueues.entrySet()) {
+    		print(productionQueue.getKey().toString());
+    		for (UnitType unitType : productionQueue.getValue()) {
+    			print("\t" + unitType.toString());
+    		}
+    	}
+    	print("\nProducing Units");
+    	for (Entry<Unit, ProductionUnit> producingUnit : producingUnits.entrySet()) {
+    		print("\t" + producingUnit.getKey().getType() + " #"+producingUnit.getKey().getID() + ": " + producingUnit.getValue().type.toString() + " #" + producingUnit.getValue().unit.getID());
+    	}
+    	print("\nPlanned Count");
+    	for (Entry<UnitType, Integer> planned : plannedCount.entrySet()) {
+    		print("\t" + planned.getKey().toString() + ": " + planned.getValue());
+    	}
+    	print("\nStarted Count");
+    	for (Entry<UnitType, Integer> started : startedCount.entrySet()) {
+    		print("\t" + started.getKey().toString() + ": " + started.getValue());
+    	}
+    }
+    
     public ProductionManager(Arbitrator<Unit, Double> arbitrator, BuildingPlacer placer) {
         super(arbitrator);
         this.placer = placer;
@@ -46,9 +70,13 @@ public class ProductionManager extends ArbitratedManager {
 				e.printStackTrace();
 			}
         }
+        
         plannedCount = new HashMap<UnitType, Integer>(allUnitTypes.size());
         startedCount = new HashMap<UnitType, Integer>(allUnitTypes.size());
+
+        System.out.println("\n\n\n\n\nPrinting All Unit Types\n\n\n\n\n");
         for (UnitType type : allUnitTypes) {
+        	System.out.println(type.toString());
             plannedCount.put(type, 0);
             startedCount.put(type, 0);
         }
@@ -160,6 +188,7 @@ public class ProductionManager extends ArbitratedManager {
     }
     
     public boolean train(UnitType type) {
+    	System.out.println("Training " + type.toString());
         if (!type.whatBuilds().first.canProduce() || type.isBuilding()) {
             return false;
         }

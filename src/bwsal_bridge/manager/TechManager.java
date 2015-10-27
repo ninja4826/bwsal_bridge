@@ -24,12 +24,9 @@ public class TechManager extends ArbitratedManager {
         new HashMap<Unit, TechType>();
     protected final Set<TechType> plannedTech = new HashSet<TechType>();
     
-    public TechManager(Arbitrator<Unit, Double> arbitrator) {
+    public TechManager(Arbitrator<Unit, Double> arbitrator, BuildingPlacer buildingPlacer) {
         super(arbitrator);
-    }
-    
-    public void setBuildingPlacer(BuildingPlacer buildingPlacer) {
-        placer = buildingPlacer;
+        this.placer = buildingPlacer;
     }
     
     @Override

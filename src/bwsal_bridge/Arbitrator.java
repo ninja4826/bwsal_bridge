@@ -15,8 +15,21 @@ public class Arbitrator<T, U extends Comparable<U>> {
 	    protected final Map<Controller<T, U>, Set<T>> objects = new HashMap<Controller<T, U>, Set<T>>();
 	    protected final Set<T> updatedObjects = new HashSet<T>();
 	    
+	    public void announce(String method, Controller<T, U> controller, T object, U bid) {
+//	    	String str = method + " " + controller.toString() + ": " + object.toString();
+//	    	if (bid == null) {
+//	    		System.out.println(str);
+//	    	} else {
+//	    		System.out.println(str + " " + bid.toString());
+//	    	}
+	    }
+	    
+	    public void announce(String method, Controller<T, U> controller, T object) {
+	    	announce(method, controller, object, null);
+	    }
+	    
 	    public boolean setBid(Controller<T, U> controller, T object, U bid) {
-//	    	System.out.println(controller.toString() + ": " + object.toString() + " " + bid.toString());
+	    	announce("Set", controller, object, bid);
 	        if (controller == null || object == null || bid == null) {
 	            return false;
 	        }
@@ -31,6 +44,8 @@ public class Arbitrator<T, U extends Comparable<U>> {
 	    }
 	    
 	    public boolean removeBid(Controller<T, U> controller, T object) {
+	    	announce("Remove", controller, object);
+	    	System.out.println("Remove bid " + controller.toString() + ": " + object.toString());
 	        if (controller == null || object == null) {
 	            return false;
 	        }
@@ -42,6 +57,8 @@ public class Arbitrator<T, U extends Comparable<U>> {
 	    }
 	    
 	    public boolean decline(Controller<T, U> controller, T object, U bid) {
+	    	announce("Decline", controller, object, bid);
+	    	System.out.println("Decline bid " + controller.toString() + ": " + object.toString() + " " + bid.toString());
 	        if (controller == null || object == null || bid == null) {
 	            return false;
 	        }
@@ -55,6 +72,7 @@ public class Arbitrator<T, U extends Comparable<U>> {
 	    }
 	    
 	    public boolean accept(Controller<T, U> controller, T object) {
+	    	announce("Accept", controller, object);
 	    	System.out.println("Accept called");
 	        if (controller == null || object == null) {
 	            return false;
@@ -83,6 +101,7 @@ public class Arbitrator<T, U extends Comparable<U>> {
 	    }
 	    
 	    public boolean accept(Controller<T, U> controller, T object, U bid) {
+	    	announce("Accept", controller, object, bid);
 	        if (controller == null || object == null || bid == null) {
 	            return false;
 	        }
