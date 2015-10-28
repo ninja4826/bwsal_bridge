@@ -100,7 +100,19 @@ public class TestBot extends DefaultBWListener {
 //				buildOrderManager.buildAdditional(5, UnitType.Zerg_Lurker, 80);
 //				buildOrderManager.build(12, UnitType.Zerg_Drone, 30);
 			}
+		} else if (self.getRace() == Race.Protoss) {
+			if (buildID == 1) {
+				buildOrderManager.build(8, UnitType.Protoss_Probe, 90);
+				buildOrderManager.build(1, UnitType.Protoss_Pylon, 89, self.getStartLocation());
+//				buildOrderManager.build(1, UnitType.Protoss_Gateway, 88);
+//				buildOrderManager.build(1, UnitType.Protoss_Cybernetics_Core, 87);
+			}
+		} else if (self.getRace() == Race.Terran) {
+			if (buildID == 1) {
+				buildOrderManager.build(20, UnitType.Terran_SCV, 90);
+			}
 		}
+		
 		workerManager.updateWorkerAssignments();
 		
 		buildManager.getProductionManager().announceValues();

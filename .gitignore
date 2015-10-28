@@ -40,3 +40,4 @@ local.properties
 
 bwapi-data/BWTA2/*
 *.dll
+*.log

@@ -24,7 +24,7 @@ public class ConstructionManager extends ArbitratedManager {
     protected final List<Building> incompleteBuildings = new ArrayList<Building>();
     protected final Map<UnitType, Set<Building>> buildingsNeedingBuilders = 
         new HashMap<UnitType, Set<Building>>();
-    protected final Map<UnitType, Integer> plannedCount;
+    protected final Map<UnitType, Integer> plannedCount;;
     protected final Map<UnitType, Integer> startedCount;
     
     public ConstructionManager(Arbitrator<Unit, Double> arbitrator, BuildingPlacer placer) {
@@ -34,7 +34,7 @@ public class ConstructionManager extends ArbitratedManager {
         Field[] unitTypeFields = UnitType.class.getDeclaredFields();
         for (Field f : unitTypeFields) {
         	try {
-        		if (Modifier.isPublic(f.getModifiers()) && f.getType().getSimpleName() == "UnitType") {
+        		if (Modifier.isPublic(f.getModifiers()) && f.getType().getName() == "bwapi.UnitType") {
         			System.out.printf("%d%n %s %s %s%n",f.getModifiers(), Modifier.toString(f.getModifiers()), f.getType().getSimpleName(), f.getName());
         			allUnitTypes.add((UnitType) f.get(null));
         		}
