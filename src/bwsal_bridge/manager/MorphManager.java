@@ -28,22 +28,28 @@ public class MorphManager extends ArbitratedManager {
 	        super(arbitrator);
 	        Set<UnitType> allUnitTypes = new HashSet<>();
 	        Field[] unitTypeFields = UnitType.class.getDeclaredFields();
+	        ArrayList<String> fieldNames = new ArrayList<>();
 	        for (Field f : unitTypeFields) {
 	        	try {
-	        		if (Modifier.isPublic(f.getModifiers()) && f.getType().getSimpleName() == "UnitType") {
+	        		System.out.println("morph loop");
+	        		fieldNames.add(f.getName());
+	        		int modifiers = f.getModifiers();
+	        		if (Modifier.isPublic(f.getModifiers()) && f.getType().getName() == "bwapi.UnitType") {
+	        			System.err.println("ugh");
 	        			allUnitTypes.add((UnitType) f.get(null));
 	        		}
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	        }
+	        System.err.println("continuing... " + allUnitTypes.size());
 	        plannedCount = new HashMap<UnitType, Integer>(allUnitTypes.size());
 	        startedCount = new HashMap<UnitType, Integer>(allUnitTypes.size());
 	        for (UnitType type : allUnitTypes) {
+	        	System.out.println("morph: " + type.toString());
 	            plannedCount.put(type, 0);
 	            startedCount.put(type, 0);
 	        }
@@ -155,11 +161,12 @@ public class MorphManager extends ArbitratedManager {
 	    }
 	    
 	    public int getPlannedCount(UnitType type) {
-	        return plannedCount.get(type);
+	    	System.out.println("planned: " + plannedCount.get(type));
+	        return (int) plannedCount.get(type);
 	    }
 	    
 	    public int getStartedCount(UnitType type) {
-	        return startedCount.get(type);
+	        return (int) startedCount.get(type);
 	    }
 	    
 	    /**

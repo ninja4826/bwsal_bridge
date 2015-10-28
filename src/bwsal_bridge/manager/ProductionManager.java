@@ -58,7 +58,8 @@ public class ProductionManager extends ArbitratedManager {
         Set<UnitType> allUnitTypes = new HashSet<>();
         for (Field f : UnitType.class.getDeclaredFields()) {
         	try {
-        		if (Modifier.isPublic(f.getModifiers()) && f.getType().getSimpleName() == "UnitType") {
+        		if (Modifier.isPublic(f.getModifiers()) && f.getType().getName() == "bwapi.UnitType") {
+        			System.err.println((UnitType) f.get(null));
         			allUnitTypes.add((UnitType) f.get(null));
         		}
 				
@@ -207,11 +208,11 @@ public class ProductionManager extends ArbitratedManager {
     }
     
     public int getPlannedCount(UnitType type) {
-        return plannedCount.get(type);
+        return (int) plannedCount.get(type);
     }
     
     public int getStartedCount(UnitType type) {
-        return startedCount.get(type);
+        return (int) startedCount.get(type);
     }
     
     /**

@@ -31,6 +31,8 @@ public class TestBot extends DefaultBWListener {
 	private UpgradeManager upgradeManager;
 	private WorkerManager workerManager;
 	
+	private boolean started = false;
+	
 	private boolean workerStarted = false;
 	
 	public void run() {
@@ -73,6 +75,7 @@ public class TestBot extends DefaultBWListener {
 		System.out.println("== : " + (UnitType.Protoss_Arbiter == UnitType.Protoss_Arbiter));
 		System.out.println("== : " + (UnitType.Protoss_Arbiter == UnitType.Protoss_Archon));
 		
+		
 //		Initialize Managers
 		arbitrator = new Arbitrator<>();
 		
@@ -90,7 +93,7 @@ public class TestBot extends DefaultBWListener {
 		
 		if (self.getRace() == Race.Zerg) {
 			if (buildID == 1) {
-				buildOrderManager.build(8, UnitType.Zerg_Drone, 90);
+				buildOrderManager.build(20, UnitType.Zerg_Drone, 90);
 //				buildOrderManager.buildAdditional(1, UnitType.Zerg_Overlord, 85);
 //				buildOrderManager.build(12, UnitType.Zerg_Drone, 84);
 //				buildOrderManager.buildAdditional(1, UnitType.Zerg_Lair, 82);
@@ -98,19 +101,20 @@ public class TestBot extends DefaultBWListener {
 //				buildOrderManager.build(12, UnitType.Zerg_Drone, 30);
 			}
 		}
-		
 		workerManager.updateWorkerAssignments();
-		Map<Long, UnitType> unitInstances = UnitType.getInstances();
-		for (Entry<Long, UnitType> unit : unitInstances.entrySet()) {
-			System.out.println(unit.getKey() + ": " + unit.getValue().toString());
-		}
 		
 		buildManager.getProductionManager().announceValues();
+		
+		
+		
+		
+		
 	}
 	
 	@Override
 	public void onFrame() {
 		if (game.isPaused()) return;
+		
 		game.drawTextScreen(10, 10, "Playing as " + self.getName() + " - " + self.getRace());
 		
 		StringBuilder units = new StringBuilder("My units:\n");
@@ -154,5 +158,7 @@ public class TestBot extends DefaultBWListener {
 		arbitrator.update();
 	}
 	
-	public static void main(String[] args) { new TestBot().run(); }
+	public static void main(String[] args) {
+		new TestBot().run();
+	}
 }

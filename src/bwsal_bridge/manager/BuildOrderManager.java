@@ -11,15 +11,17 @@ import bwapi.TechType;
 import bwapi.TilePosition;
 import bwapi.UpgradeType;
 import bwsal_bridge.GameHandler;
-import bwsal_bridge.priority.PriorityMap;
+import bwsal_bridge.priority.Priority;
+import bwsal_bridge.priority.PriorityList;
+//import bwsal_bridge.priority.PriorityMap;
 import bwapi.UnitType;
 
 public class BuildOrderManager {
 	protected final BuildManager buildManager;
     protected final TechManager techManager;
     protected final UpgradeManager upgradeManager;
-    protected final Map<Integer, List<BuildItem>> items =
-        new PriorityMap();
+    protected final Map<Integer, List<BuildItem>> items = new HashMap<>();
+    protected final PriorityList priorities = new PriorityList();
     protected int usedMinerals;
     protected int usedGas;
     
@@ -31,10 +33,71 @@ public class BuildOrderManager {
         usedGas = 0;
     }
     
+    public void print(String str) { System.out.println(str); }
+    
     public void update() {
+    	print("Update");
         if (items.isEmpty()) {
             return;
         }
+        
+        print("Not empty");
+        
+        @SuppressWarnings("unused")
+		int o = 5;
+        
+//        while (priorities.last().getItems().isEmpty()) {
+//        	priorities.removeLast();
+//        	if (priorities.isEmpty()) return;
+//        }
+//        
+//        Iterator<BuildItem> itemIterator = priorities.last().getItems().iterator();
+//
+//        
+//        
+//        while (itemIterator.hasNext()) {
+//        	BuildItem item = itemIterator.next();
+//        	if (item.unitType != UnitType.None) {
+//        		if (item.isAdditional) {
+//        			if (item.count > 0) {
+//        				if (hasResources(item.unitType)) {
+//        					buildManager.build(item.unitType, item.seedPosition);
+//        					spendResources(item.unitType);
+//        					item.count--;
+//        				}
+//        			} else {
+//        				itemIterator.remove();
+//        			}
+//        		} else {
+//        			if (buildManager.getPlannedCount(item.unitType) >= item.count) {
+//        				itemIterator.remove();
+//        			} else {
+//        				if (hasResources(item.unitType)) {
+//        					buildManager.build(item.unitType, item.seedPosition);
+//        					spendResources(item.unitType);
+//        				}
+//        			}
+//        		}
+//        	} else if (item.techType != TechType.None) {
+//        		if (techManager.planned(item.techType)) {
+//        			itemIterator.remove();
+//        		} else if (hasResources(item.techType)) {
+//        			techManager.research(item.techType);
+//        			spendResources(item.techType);
+//        		}
+//        	} else {
+//                if (upgradeManager.getPlannedLevel(item.upgradeType) >= item.count) {
+//                    itemIterator.remove();
+//                } else {
+//                    if (!GameHandler.getGame().self().isUpgrading(item.upgradeType) &&
+//                            hasResources(item.upgradeType)) {
+//                        upgradeManager.upgrade(item.upgradeType);
+//                        spendResources(item.upgradeType);
+//                    }
+//                }
+//            }
+//            o += 20;
+//        }
         
         
         
@@ -52,16 +115,21 @@ public class BuildOrderManager {
             }
             index = list.size() - 1;
         }
-        @SuppressWarnings("unused")
-		int o = 5;
         Iterator<BuildItem> itemIterator = list.get(0).getValue().iterator();
         while (itemIterator.hasNext()) {
+        	print("Loop");
             BuildItem item = itemIterator.next();
+            print(item.unitType.toString());
 //            if (!item.unitType.equals(UnitType.None)) {
             if (item.unitType != UnitType.None) {
+            	print("Not null");
                 if (item.isAdditional) {
+                	print("additional");
                     if (item.count > 0) {
+                    	print("count");
                         if (hasResources(item.unitType)) {
+                        	print("has resources");
+                        	System.out.println("Building " + item.unitType.toString() + " as Additional");
                             buildManager.build(item.unitType, item.seedPosition);
                             spendResources(item.unitType);
                             item.count--;
@@ -70,10 +138,16 @@ public class BuildOrderManager {
                         itemIterator.remove();
                     }
                 } else {
+                	print("not additional");
+                	print("" + buildManager.getPlannedCount(item.unitType) + ": " + item.count);
                     if (buildManager.getPlannedCount(item.unitType) >= item.count) {
+                    	print("Need less");
                         itemIterator.remove();
                     } else {
+                    	print("Need more");
                         if (hasResources(item.unitType)) {
+                        	print("has resources");
+                        	System.out.println("Building " + item.unitType.toString());
                             buildManager.build(item.unitType, item.seedPosition);
                             spendResources(item.unitType);
                         }
@@ -81,18 +155,25 @@ public class BuildOrderManager {
                 }
 //            } else if (!item.techType.equals(TechType.None)) {
             } else if (item.techType != TechType.None) {
+            	print("is tech");
                 if (techManager.planned(item.techType)) {
+                	print("is planned");
                     itemIterator.remove();
                 } else if (hasResources(item.techType)) {
+                	print("has resources");
                     techManager.research(item.techType);
                     spendResources(item.techType);
                 }
             } else {
+            	print("is upgrade");
                 if (upgradeManager.getPlannedLevel(item.upgradeType) >= item.count) {
+                	print("high enough level");
                     itemIterator.remove();
                 } else {
+                	print("level up");
                     if (!GameHandler.getGame().self().isUpgrading(item.upgradeType) &&
                             hasResources(item.upgradeType)) {
+                    	print("not upgrading and has resources");
                         upgradeManager.upgrade(item.upgradeType);
                         spendResources(item.upgradeType);
                     }

@@ -68,12 +68,15 @@ public class BuildManager {
     public int getPlannedCount(UnitType type) {
         if (type.getRace().equals(Race.Zerg) && type.isBuilding() == 
                 type.whatBuilds().first.isBuilding()) {
+        	System.out.println("morph");
             return GameHandler.getGame().self().completedUnitCount(type) +
                 morphManager.getPlannedCount(type);
         } else if (type.isBuilding()) {
+        	System.out.println("construction");
             return GameHandler.getGame().self().completedUnitCount(type) +
                 constructionManager.getPlannedCount(type);
         } else {
+        	System.out.println("production");
             return GameHandler.getGame().self().completedUnitCount(type) +
                 productionManager.getPlannedCount(type);
         }

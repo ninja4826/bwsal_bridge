@@ -224,6 +224,18 @@ public class WorkerManager extends ArbitratedManager {
                     worker.getKey().getTarget().getType().isResourceDepot())) {
                 worker.getValue().resource = worker.getValue().newResource;
             }
+            int targetID = 0;
+            int resourceID = 0;
+            
+            if (worker.getKey().exists() && worker.getValue().resource.exists()) {
+            	targetID = worker.getKey().getID();
+            	resourceID = worker.getValue().resource.getID();
+            }
+            
+            if (targetID == 0 || resourceID == 0) {
+            	return;
+            }
+            
             if (WORKER_RESOURCES.contains(worker.getKey().getOrder()) &&
                     (worker.getKey().getTarget() == null || !worker.getKey().getTarget().exists() ||
                             !worker.getKey().getTarget().getType().isResourceDepot()) && 
